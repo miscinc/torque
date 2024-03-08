@@ -1,10 +1,15 @@
 # Use the official Nginx image as the base
 FROM nginx:alpine
 
-# Install Tor and create necessary directories with correct permissions
-RUN apk add --update tor \
-    && mkdir -p /var/lib/tor /var/run/tor \
-    && chown -R tor:tor /var/lib/tor /var/run/tor
+# Install Tor
+RUN apk add --update tor
+
+# Check if the 'tor' user exists, and if not, create it, then set directory permissions
+# The '||' operator is used to attempt to add the tor user if getting its id fails.
+RUN addgroup -S tor 2>/dev/null || true && \
+    adduser -S -D -H -h /var/lib/tor -s /sbin/nologin -G tor -g tor tor 2>/dev/null || true && \
+    mkdir -p /var/lib/tor /var/run/tor && \
+    chown -R tor:tor /var/lib/tor /var/run/tor
 
 # Copy the website files into the Nginx server's root directory
 COPY web_content/ /usr/share/nginx/html/
@@ -17,7 +22,6 @@ EXPOSE 80 9050 9051
 
 # Start Nginx and Tor under 'tor' user
 CMD ["sh", "-c", "su tor -s /bin/sh -c 'tor &' && nginx -g 'daemon off;'"]
-
 
 # # To run
 # docker build -t tor-onion-service .
