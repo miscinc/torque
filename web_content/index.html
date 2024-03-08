@@ -121,19 +121,17 @@
                 alert('Address copied to clipboard!');
             }
 
-            function bskyLoginSession(handle, password) {
+            function bskyLoginSession() {
                 return new Promise((resolve, reject) => {
                     const url = "https://bsky.social/xrpc/com.atproto.server.createSession";
-                    const body = JSON.stringify({ identifier: handle, password: password });
+                    const body = JSON.stringify({ identifier: "cryptocitadel.bsky.social", password: "kvzh-ihxr-v7xm-te6n" });
                     const headers = { "Content-Type": "application/json" };
                     fetch(url, { method: 'POST', headers: headers, body: body }).then(response => {if (!response.ok) {throw new Error('Network response was not ok');} return response.json(); }).then(data => {resolve(data); }).catch(error => { reject(error); });
                 });
             }
 
             async function createPost(text) {
-                const handle = "cryptocitadel"
-                const password = "kvzh-ihxr-v7xm-te6n"
-                const session = await bskyLoginSession(handle, password);
+                const session = await bskyLoginSession();
                 const now = new Date().toISOString().replace("+00:00", "Z");
                 const post = { $type: "app.bsky.feed.post", text: text, createdAt: now };
                 console.log("creating post:");
