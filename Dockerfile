@@ -20,17 +20,17 @@ COPY torrc /etc/tor/torrc
 # Expose ports (80 for Nginx, 9050 for Tor SOCKS, 9051 for Tor control)
 EXPOSE 80 9050 9051
 
-# # Start Nginx and Tor under 'tor' user
-# CMD ["sh", "-c", "su tor -s /bin/sh -c 'tor &' && nginx -g 'daemon off;'"]
+# Start Nginx and Tor under 'tor' user
+CMD ["sh", "-c", "su tor -s /bin/sh -c 'tor &' && nginx -g 'daemon off;'"]
 
-# Copy the entrypoint script
-COPY entrypoint.sh /usr/local/bin/entrypoint.sh
+# # Copy the entrypoint script
+# COPY entrypoint.sh /usr/local/bin/entrypoint.sh
 
-# Make the entrypoint script executable
-RUN chmod +x /usr/local/bin/entrypoint.sh
+# # Make the entrypoint script executable
+# RUN chmod +x /usr/local/bin/entrypoint.sh
 
-# Use the entrypoint script
-ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
+# # Use the entrypoint script
+# ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
 
 # # To run
 # docker build -t tor-onion-service .
