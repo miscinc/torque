@@ -11,4 +11,4 @@ services:
       - ./torrc:/etc/tor/torrc:ro               # Use your Tor configuration
 
 
-
+# docker-compose down --rmi all --volumes
