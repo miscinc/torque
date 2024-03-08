@@ -1,0 +1,14 @@
+version: '3.8'
+services:
+  tor-onion-service:
+    build: .
+    ports:
+      - "8080:80"       # Expose Nginx to host system
+      - "9050:9050"     # Expose Tor SOCKS proxy
+      - "9051:9051"     # Expose Tor Control Port
+    volumes:
+      - ./web_content:/usr/share/nginx/html:ro  # Mount the web content into Nginx
+      - ./torrc:/etc/tor/torrc:ro               # Use your Tor configuration
+
+
+
