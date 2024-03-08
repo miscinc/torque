@@ -36,6 +36,12 @@
             .loading {
                 display: none;
             }
+
+            .copy-button {
+                cursor: pointer;
+                display: inline-block;
+                margin-left: 10px;
+            }
         </style>
     </head>
 
@@ -50,6 +56,10 @@
             <div id="paymentAddress" style="display: none;">
                 <h2>Your Bitcoin Address:</h2>
                 <p id="address"></p>
+                <svg class="copy-button" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                    <path d="M0 0h24v24H0z" fill="none"/>
+                    <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-1 14H6V7h12v10zm-4-9h-2V5h-2v3H8l4 4 4-4h-3z"/>
+                </svg>
             </div>
         </div>
 
@@ -61,6 +71,7 @@
                 var loading = document.querySelector('.loading');
                 var paymentAddress = document.getElementById('paymentAddress');
                 var address = document.getElementById('address');
+                var copyButton = document.querySelector('.copy-button');
 
                 submitButton.disabled = true;
                 loading.style.display = 'inline-block';
@@ -74,6 +85,10 @@
                     submitButton.disabled = false;
                     loading.style.display = 'none';
                     usernameInput.value = '';
+
+                    copyButton.addEventListener('click', function() {
+                        copyToClipboard(address.textContent);
+                    });
                 }, 2000);
             }
 
@@ -81,6 +96,16 @@
                 // Generate Bitcoin address based on the username
                 // Replace this with your actual Bitcoin address generation logic
                 return '1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa';
+            }
+
+            function copyToClipboard(text) {
+                var textarea = document.createElement('textarea');
+                textarea.value = text;
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+                alert('Address copied to clipboard!');
             }
         </script>
     </body>
