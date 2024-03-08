@@ -5,7 +5,7 @@ FROM nginx:alpine
 RUN apk add --update tor
 
 # Copy the website files into the Nginx server's root directory
-COPY web_content/ /usr/share/nginx/html/
+COPY web/ /usr/share/nginx/html/
 
 # Copy the Tor configuration file into the container
 COPY torrc /etc/tor/torrc
