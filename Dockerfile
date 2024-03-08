@@ -2,10 +2,15 @@
 FROM nginx:alpine
 
 # Install Tor
-RUN apk add --update tor
+RUN apk add --update tor \
+    # Create a 'tor' user with a specified user ID
+    && adduser -D -u 100 tor \
+    # Create and set permissions for the Tor directory
+    && mkdir /var/lib/tor \
+    && chown -R tor:tor /var/lib/tor
 
 # Copy the website files into the Nginx server's root directory
-COPY web/ /usr/share/nginx/html/
+COPY web_content/ /usr/share/nginx/html/
 
 # Copy the Tor configuration file into the container
 COPY torrc /etc/tor/torrc
@@ -13,9 +18,8 @@ COPY torrc /etc/tor/torrc
 # Expose ports (80 for Nginx, 9050 for Tor SOCKS, 9051 for Tor control)
 EXPOSE 80 9050 9051
 
-# Start Nginx and Tor
-CMD ["sh", "-c", "tor & nginx -g 'daemon off;'"]
-
+# Start Nginx and Tor under 'tor' user
+CMD ["sh", "-c", "su tor -s /bin/sh -c 'tor &' && nginx -g 'daemon off;'"]
 
 
 
