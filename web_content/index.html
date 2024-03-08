@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="en">
     <head>
         <meta charset="UTF-8">
@@ -30,6 +31,10 @@
                 border: none;
                 cursor: pointer;
             }
+
+            .loading {
+                display: none;
+            }
         </style>
     </head>
 
@@ -38,16 +43,29 @@
             <h1>Hello World</h1>
             <form>
                 <input type="text" placeholder="Enter your name">
-                <input type="submit" value="Submit">
+                <input type="submit" value="Submit" onclick="handleSubmit(event)">
+                <span class="loading">Loading...</span>
             </form>
         </div>
         
         <script>
-            document.querySelector('form').addEventListener('submit', function(event) {
+            function handleSubmit(event) {
                 event.preventDefault();
                 var input = document.querySelector('input[type="text"]');
+                var submitButton = document.querySelector('input[type="submit"]');
+                var loading = document.querySelector('.loading');
+
+                submitButton.disabled = true;
+                loading.style.display = 'inline-block';
+
                 console.log(input.value);
-            });
+
+                setTimeout(function() {
+                    submitButton.disabled = false;
+                    loading.style.display = 'none';
+                    input.value = '';
+                }, 2000);
+            }
         </script>
     </body>
 </html>
