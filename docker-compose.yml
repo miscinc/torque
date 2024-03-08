@@ -10,8 +10,13 @@ services:
       - ./web_content:/usr/share/nginx/html:ro  # Mount the web content into Nginx
       - ./torrc:/etc/tor/torrc:ro               # Use your Tor configuration
 
-# # Shut down
-# docker-compose down --rmi all --volumes
+
+
 
 # # Show .onion addr
 # docker-compose exec tor-onion-service cat /var/lib/tor/hidden_service/hostname
+
+
+# # Shut down
+# docker-compose down --rmi all --volumes
+

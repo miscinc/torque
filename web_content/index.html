@@ -8,17 +8,46 @@
             body {
                 background-color: #333333;
                 color: #ffffff;
-                align-items: center;
+                display: flex;
+                justify-content: center;
+                align-items: center; /* Added to center the content vertically */
+                height: 100vh; /* Added to make the content take up the full viewport height */
+            }
+
+            .container {
+                text-align: center; /* Added to center the content horizontally */
+            }
+
+            input[type="text"] {
+                padding: 10px;
+                margin-right: 10px;
+            }
+
+            input[type="submit"] {
+                padding: 10px 20px;
+                background-color: #ffffff;
+                color: #333333;
+                border: none;
+                cursor: pointer;
             }
         </style>
     </head>
 
     <body>
-        <div>
-            <h1>Hello World from .onion</h1>
+        <div class="container">
+            <h1>Hello World</h1>
+            <form>
+                <input type="text" placeholder="Enter your name">
+                <input type="submit" value="Submit">
+            </form>
         </div>
-    <script>
-        console.log('hello world')
-    </script>
+        
+        <script>
+            document.querySelector('form').addEventListener('submit', function(event) {
+                event.preventDefault();
+                var input = document.querySelector('input[type="text"]');
+                console.log(input.value);
+            });
+        </script>
     </body>
 </html>

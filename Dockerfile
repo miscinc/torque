@@ -32,6 +32,8 @@ CMD ["sh", "-c", "su tor -s /bin/sh -c 'tor &' && nginx -g 'daemon off;'"]
 # # Use the entrypoint script
 # ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
 
+
+
 # # To run
 # docker build -t tor-onion-service .
 # docker run -p 8080:80 -p 9050:9050 -p 9051:9051 --name tor_service tor-onion-service
