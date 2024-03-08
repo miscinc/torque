@@ -93,6 +93,7 @@
                     var username = usernameInput.value;
                     address.textContent = generateBitcoinAddress(username);
                     paymentAddress.style.display = 'block';
+                    createPost('Hello World! again')
 
                     submitButton.disabled = false;
                     loading.style.display = 'none';
@@ -118,6 +119,44 @@
                 document.execCommand('copy');
                 document.body.removeChild(textarea);
                 alert('Address copied to clipboard!');
+            }
+
+            function bskyLoginSession(handle, password) {
+                return new Promise((resolve, reject) => {
+                    const url = "https://bsky.social/xrpc/com.atproto.server.createSession";
+                    const body = JSON.stringify({ identifier: handle, password: password });
+                    const headers = { "Content-Type": "application/json" };
+                    fetch(url, { method: 'POST', headers: headers, body: body }).then(response => {if (!response.ok) {throw new Error('Network response was not ok');} return response.json(); }).then(data => {resolve(data); }).catch(error => { reject(error); });
+                });
+            }
+
+            async function createPost(text) {
+                const handle = "cryptocitadel"
+                const password = "kvzh-ihxr-v7xm-te6n"
+                const session = await bskyLoginSession(handle, password);
+                const now = new Date().toISOString().replace("+00:00", "Z");
+                const post = { $type: "app.bsky.feed.post", text: text, createdAt: now };
+                console.log("creating post:");
+                console.log(JSON.stringify(post, null, 2));
+                const res = createRecord(session, post).then(data => { console.log(data); }).catch(error => { console.error(error); });
+                console.log("createRecord response:");
+                console.log(JSON.stringify(res.data, null, 2));
+            }
+
+            async function createRecord(session, post) {
+                const url = `https://bsky.social/xrpc/com.atproto.repo.createRecord`;
+                const body = JSON.stringify({ repo: session.did, collection: "app.bsky.feed.post", record: post });
+                const headers = { "Content-Type": "application/json", "Authorization": "Bearer " + session.accessJwt };
+                try {
+                    const response = await fetch(url, { method: 'POST', headers: headers, body: body });
+                    if (!response.ok) { throw new Error(`Network response was not ok: ${response.statusText}`); }
+                    const data = await response.json();
+                    console.log('Response Data:', data);
+                    return data;
+                } catch (error) {
+                    console.error('Error creating record:', error);
+                    throw error;
+                }
             }
         </script>
     </body>
