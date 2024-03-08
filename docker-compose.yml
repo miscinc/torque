@@ -10,5 +10,4 @@ services:
       - ./web_content:/usr/share/nginx/html:ro  # Mount the web content into Nginx
       - ./torrc:/etc/tor/torrc:ro               # Use your Tor configuration
 
-
 # docker-compose down --rmi all --volumes
