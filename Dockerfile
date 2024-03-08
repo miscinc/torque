@@ -1,13 +1,10 @@
 # Use the official Nginx image as the base
 FROM nginx:alpine
 
-# Install Tor
+# Install Tor and create necessary directories with correct permissions
 RUN apk add --update tor \
-    # Create a 'tor' user with a specified user ID
-    && adduser -D -u 100 tor \
-    # Create and set permissions for the Tor directory
-    && mkdir /var/lib/tor \
-    && chown -R tor:tor /var/lib/tor
+    && mkdir -p /var/lib/tor /var/run/tor \
+    && chown -R tor:tor /var/lib/tor /var/run/tor
 
 # Copy the website files into the Nginx server's root directory
 COPY web_content/ /usr/share/nginx/html/
@@ -20,7 +17,6 @@ EXPOSE 80 9050 9051
 
 # Start Nginx and Tor under 'tor' user
 CMD ["sh", "-c", "su tor -s /bin/sh -c 'tor &' && nginx -g 'daemon off;'"]
-
 
 
 # # To run
