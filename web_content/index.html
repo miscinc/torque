@@ -43,29 +43,44 @@
         <div class="container">
             <h1>Hello World</h1>
             <form>
-                <input type="text" placeholder="Enter your name">
-                <input type="submit" value="Submit" onclick="handleSubmit(event)">
+                <input type="text" id="username" placeholder="Enter your username">
+                <input type="submit" value="Submit" onclick="handlePayment(event)">
                 <span class="loading">Loading...</span>
             </form>
+            <div id="paymentAddress" style="display: none;">
+                <h2>Your Bitcoin Address:</h2>
+                <p id="address"></p>
+            </div>
         </div>
-        
+
         <script>
-            function handleSubmit(event) {
+            function handlePayment(event) {
                 event.preventDefault();
-                var input = document.querySelector('input[type="text"]');
+                var usernameInput = document.getElementById('username');
                 var submitButton = document.querySelector('input[type="submit"]');
                 var loading = document.querySelector('.loading');
+                var paymentAddress = document.getElementById('paymentAddress');
+                var address = document.getElementById('address');
 
                 submitButton.disabled = true;
                 loading.style.display = 'inline-block';
 
-                console.log(input.value);
-
+                // Simulating API call to generate Bitcoin address
                 setTimeout(function() {
+                    var username = usernameInput.value;
+                    address.textContent = generateBitcoinAddress(username);
+                    paymentAddress.style.display = 'block';
+
                     submitButton.disabled = false;
                     loading.style.display = 'none';
-                    input.value = '';
+                    usernameInput.value = '';
                 }, 2000);
+            }
+
+            function generateBitcoinAddress(username) {
+                // Generate Bitcoin address based on the username
+                // Replace this with your actual Bitcoin address generation logic
+                return '1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa';
             }
         </script>
     </body>
